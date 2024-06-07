@@ -4,12 +4,15 @@ import pandas as pd
 # Title of the app
 st.title('Oldest and Newest Dates Finder')
 
-# Upload the Excel file
-uploaded_file = st.file_uploader("Upload your Excel file", type=["xlsx"])
+# Upload the file
+uploaded_file = st.file_uploader("Upload your Excel or CSV file", type=["xlsx", "csv"])
 
 if uploaded_file is not None:
-    # Read the Excel file
-    df = pd.read_excel(uploaded_file)
+    # Determine the file type and read the file accordingly
+    if uploaded_file.name.endswith('.xlsx'):
+        df = pd.read_excel(uploaded_file)
+    elif uploaded_file.name.endswith('.csv'):
+        df = pd.read_csv(uploaded_file)
     
     # Display the dataframe
     st.write("DataFrame", df)
@@ -29,4 +32,4 @@ if uploaded_file is not None:
     else:
         st.write("The uploaded file does not contain a 'date' column.")
 else:
-    st.write("Please upload an Excel file to proceed.")
+    st.write("Please upload an Excel or CSV file to proceed.")
