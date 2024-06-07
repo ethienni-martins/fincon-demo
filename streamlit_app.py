@@ -17,29 +17,21 @@ if uploaded_file is not None:
     # Display the dataframe
     st.write("DataFrame", df)
     
-    # Try to find the date column
-    date_column = None
-    for col in df.columns:
-        try:
-            # Attempt to convert to datetime with the specified format
-            df[col] = pd.to_datetime(df[col], format='%Y-%m-%d', errors='coerce')
-            if df[col].notna().all():
-                date_column = col
-                break
-        except (ValueError, TypeError):
-            continue
-    
-    if date_column:
+    # Check if the 'Data' column exists
+    if 'Data' in df.columns:
+        # Convert the 'Data' column to datetime format
+        df['Data'] = pd.to_datetime(df['Data'], format='%Y-%m-%d', errors='coerce')
+        
         # Find the oldest and newest dates
-        oldest_date = df[date_column].min()
-        newest_date = df[date_column].max()
+        oldest_date = df['Data'].min()
+        newest_date = df['Data'].max()
         
         # Display the results
-        st.write(f"Date Column: {date_column}")
+        st.write("Date Column: Data")
         st.write("Oldest Date:", oldest_date)
         st.write("Newest Date:", newest_date)
     else:
-        st.write("The uploaded file does not contain a recognizable date column in 'YYYY-MM-DD' format.")
+        st.write("The uploaded file does not contain a 'Data' column.")
     
     # Search for the specific string in the "Histórico" column and sum the values in the "Valor" column
     if 'Histórico' in df.columns and 'Valor' in df.columns:
