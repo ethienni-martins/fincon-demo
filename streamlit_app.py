@@ -18,7 +18,7 @@ if uploaded_file is not None:
     st.write("DataFrame", df)
     
     # Assuming the date column is named 'date'
-    if 'date' in df.columns:
+    if 'data' in df.columns:
         # Convert the date column to datetime format
         df['date'] = pd.to_datetime(df['date'])
         
