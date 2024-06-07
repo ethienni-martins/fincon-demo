@@ -21,7 +21,7 @@ if uploaded_file is not None:
     date_column = None
     for col in df.columns:
         try:
-            df[col] = pd.to_datetime(df[col], format='%Y-%m-%d', errors='coerce')
+            df[col] = pd.to_datetime(df[col], errors='coerce')
             if df[col].notna().all():
                 date_column = col
                 break
@@ -30,7 +30,7 @@ if uploaded_file is not None:
     
     if date_column:
         # Convert the date column to datetime format (if not already)
-        df[date_column] = pd.to_datetime(df[date_column], format='%Y-%m-%d')
+        df[date_column] = pd.to_datetime(df[date_column], errors='coerce')
         
         # Find the oldest and newest dates
         oldest_date = df[date_column].min()
