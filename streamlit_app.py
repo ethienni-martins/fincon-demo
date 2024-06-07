@@ -47,6 +47,8 @@ if uploaded_file is not None:
     
     # Search for the specific string in the "Histórico" column and sum the values in the "Valor" column
     if 'Histórico' in df.columns and 'Valor' in df.columns:
+        # Convert 'Valor' column to numeric, forcing errors to NaN and then fill NaN with 0
+        df['Valor'] = pd.to_numeric(df['Valor'], errors='coerce').fillna(0)
         mask = df['Histórico'] == 'Tarifas - Pagamento recebido:'
         total_value = df.loc[mask, 'Valor'].sum()
         st.write("Total Value for 'Tarifas - Pagamento recebido:':", total_value)
