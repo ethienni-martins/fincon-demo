@@ -20,13 +20,11 @@ if uploaded_file is not None:
     # Try to find the date column
     date_column = None
     for col in df.columns:
-        if pd.api.types.is_datetime64_any_dtype(df[col]):
-            date_column = col
-            break
         try:
-            df[col] = pd.to_datetime(df[col], format='%Y-%m-%d')
-            date_column = col
-            break
+            df[col] = pd.to_datetime(df[col], format='%Y-%m-%d', errors='coerce')
+            if df[col].notna().all():
+                date_column = col
+                break
         except (ValueError, TypeError):
             continue
     
