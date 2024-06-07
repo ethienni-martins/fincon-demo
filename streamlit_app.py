@@ -21,7 +21,8 @@ if uploaded_file is not None:
     date_column = None
     for col in df.columns:
         try:
-            df[col] = pd.to_datetime(df[col], errors='coerce')
+            # Attempt to convert to datetime with the specified format
+            df[col] = pd.to_datetime(df[col], format='%Y-%m-%d', errors='coerce')
             if df[col].notna().all():
                 date_column = col
                 break
@@ -29,9 +30,6 @@ if uploaded_file is not None:
             continue
     
     if date_column:
-        # Convert the date column to datetime format (if not already)
-        df[date_column] = pd.to_datetime(df[date_column], errors='coerce')
-        
         # Find the oldest and newest dates
         oldest_date = df[date_column].min()
         newest_date = df[date_column].max()
@@ -41,7 +39,7 @@ if uploaded_file is not None:
         st.write("Oldest Date:", oldest_date)
         st.write("Newest Date:", newest_date)
     else:
-        st.write("The uploaded file does not contain a recognizable date column.")
+        st.write("The uploaded file does not contain a recognizable date column in 'YYYY-MM-DD' format.")
     
     # Search for the specific string in the "Histórico" column and sum the values in the "Valor" column
     if 'Histórico' in df.columns and 'Valor' in df.columns:
