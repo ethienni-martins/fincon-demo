@@ -17,19 +17,32 @@ if uploaded_file is not None:
     # Display the dataframe
     st.write("DataFrame", df)
     
-    # Assuming the date column is named 'data'
-    if 'Data' in df.columns:
-        # Convert the date column to datetime format
-        df['Data'] = pd.to_datetime(df['Data'])
+    # Try to find the date column
+    date_column = None
+    for col in df.columns:
+        if pd.api.types.is_datetime64_any_dtype(df[col]):
+            date_column = col
+            break
+        try:
+            df[col] = pd.to_datetime(df[col])
+            date_column = col
+            break
+        except (ValueError, TypeError):
+            continue
+    
+    if date_column:
+        # Convert the date column to datetime format (if not already)
+        df[date_column] = pd.to_datetime(df[date_column])
         
         # Find the oldest and newest dates
-        oldest_date = df['Data'].min()
-        newest_date = df['Data'].max()
+        oldest_date = df[date_column].min()
+        newest_date = df[date_column].max()
         
         # Display the results
+        st.write(f"Date Column: {date_column}")
         st.write("Oldest Date:", oldest_date)
         st.write("Newest Date:", newest_date)
     else:
-        st.write("The uploaded file does not contain a 'date' column.")
+        st.write("The uploaded file does not contain a recognizable date column.")
 else:
     st.write("Please upload an Excel or CSV file to proceed.")
