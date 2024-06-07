@@ -18,13 +18,13 @@ if uploaded_file is not None:
     st.write("DataFrame", df)
     
     # Assuming the date column is named 'data'
-    if 'data' in df.columns:
+    if 'Data' in df.columns:
         # Convert the date column to datetime format
-        df['data'] = pd.to_datetime(df['data'])
+        df['Data'] = pd.to_datetime(df['Data'])
         
         # Find the oldest and newest dates
-        oldest_date = df['data'].min()
-        newest_date = df['data'].max()
+        oldest_date = df['Data'].min()
+        newest_date = df['Data'].max()
         
         # Display the results
         st.write("Oldest Date:", oldest_date)
