@@ -44,5 +44,13 @@ if uploaded_file is not None:
         st.write("Newest Date:", newest_date)
     else:
         st.write("The uploaded file does not contain a recognizable date column.")
+    
+    # Search for the specific string in the "Histórico" column and sum the values in the "Valor" column
+    if 'Histórico' in df.columns and 'Valor' in df.columns:
+        mask = df['Histórico'] == 'Tarifas - Pagamento recebido:'
+        total_value = df.loc[mask, 'Valor'].sum()
+        st.write("Total Value for 'Tarifas - Pagamento recebido:':", total_value)
+    else:
+        st.write("The uploaded file does not contain the required 'Histórico' or 'Valor' columns.")
 else:
     st.write("Please upload an Excel or CSV file to proceed.")
