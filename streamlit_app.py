@@ -39,7 +39,8 @@ if uploaded_file is not None:
         df['Valor'] = pd.to_numeric(df['Valor'], errors='coerce').fillna(0)
         mask = df['Histórico'].str.contains('Tarifas - Pagamento', na=False)
         total_value = df.loc[mask, 'Valor'].sum()
-        st.write("Total Value for 'Tarifas - Pagamento':", total_value)
+        total_value_formatted = f"R$ {total_value:.2f}"
+        st.write("Total Value for 'Tarifas - Pagamento':", total_value_formatted)
     else:
         st.write("The uploaded file does not contain the required 'Histórico' or 'Valor' columns.")
 else:
