@@ -53,8 +53,14 @@ if uploaded_file is not None:
             unsafe_allow_html=True
         )
     
-    # Display button and bar chart on click
+    # Toggle button state using session state
+    if 'show_chart' not in st.session_state:
+        st.session_state.show_chart = False
+    
     if st.button("Total de Tarifas"):
+        st.session_state.show_chart = not st.session_state.show_chart
+    
+    if st.session_state.show_chart:
         st.write("## Total Value for 'Tarifas - Pagamento'")
         st.bar_chart(pd.DataFrame({'Total Value': [total_value]}))
 else:
