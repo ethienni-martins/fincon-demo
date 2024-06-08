@@ -57,7 +57,7 @@ if uploaded_file is not None:
     if 'show_chart' not in st.session_state:
         st.session_state.show_chart = False
     
-    if st.button("Total de Tarifas"):
+    if st.button("Gráfico - Total de Tarifas"):
         st.session_state.show_chart = not st.session_state.show_chart
     
     if st.session_state.show_chart:
