@@ -28,12 +28,23 @@ if uploaded_file is not None:
     # Search for the specific string in the "Histórico" column and sum the values in the "Valor" column
     if 'Histórico' in df.columns and 'Valor' in df.columns:
         df['Valor'] = pd.to_numeric(df['Valor'], errors='coerce').fillna(0)
-        mask = df['Histórico'].str.contains('Tarifas - Pagamento', na=False)
-        total_value = df.loc[mask, 'Valor'].sum()
+        
+        # Sum values for 'Tarifas - Pagamento'
+        tarifas_mask = df['Histórico'].str.contains('Tarifas - Pagamento', na=False)
+        total_value = df.loc[tarifas_mask, 'Valor'].sum()
         total_value_formatted = f"R$ {total_value:.2f}"
+        
+        # Sum values for 'Pix'
+        pix_mask = df['Histórico'].str.contains('Pix', na=False)
+        pix_values = df.loc[pix_mask, 'Valor']
+        pix_recebido = pix_values[pix_values > 0].sum()
+        pagamento_via_pix = pix_values[pix_values < 0].sum()
+        
+        pix_recebido_formatted = f"R$ {pix_recebido:.2f}"
+        pagamento_via_pix_formatted = f"R$ {pagamento_via_pix:.2f}"
     else:
         st.write("The uploaded file does not contain the required 'Histórico' or 'Valor' columns.")
-        total_value_formatted = None
+        total_value_formatted = pix_recebido_formatted = pagamento_via_pix_formatted = None
     
     # Use Streamlit columns for layout
     col1, col2 = st.columns([2, 1])
@@ -48,6 +59,8 @@ if uploaded_file is not None:
                 <p>Oldest Date: {oldest_date}</p>
                 <p>Newest Date: {newest_date}</p>
                 <p>Total Value for 'Tarifas - Pagamento': {total_value_formatted}</p>
+                <p>Pix Recebido: {pix_recebido_formatted}</p>
+                <p>Pagamento via Pix: {pagamento_via_pix_formatted}</p>
             </div>
             """,
             unsafe_allow_html=True
@@ -57,7 +70,7 @@ if uploaded_file is not None:
     if 'show_chart' not in st.session_state:
         st.session_state.show_chart = False
     
-    if st.button("Gráfico - Total de Tarifas"):
+    if st.button("Total de Tarifas"):
         st.session_state.show_chart = not st.session_state.show_chart
     
     if st.session_state.show_chart:
