@@ -53,8 +53,9 @@ if uploaded_file is not None:
             unsafe_allow_html=True
         )
     
-    # Display bar chart below the dataframe
-    st.write("## Total Value for 'Tarifas - Pagamento'")
-    st.bar_chart(pd.DataFrame({'Total Value': [total_value]}))
+    # Display button and bar chart on click
+    if st.button("Total de Tarifas"):
+        st.write("## Total Value for 'Tarifas - Pagamento'")
+        st.bar_chart(pd.DataFrame({'Total Value': [total_value]}))
 else:
     st.write("Please upload an Excel or CSV file to proceed.")
