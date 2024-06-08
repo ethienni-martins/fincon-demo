@@ -35,21 +35,22 @@ if uploaded_file is not None:
         st.write("The uploaded file does not contain the required 'Histórico' or 'Valor' columns.")
         total_value_formatted = None
     
-    # Display the dataframe and results side by side
-    st.markdown(
-        f"""
-        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-            <div style="flex: 1; width: 48%; font-size: 12px; margin-right: 2%;">
-                {df.to_html(index=False)}
-            </div>
-            <div style="flex: 0 0 48%; text-align: right; font-size: 20px; font-weight: bold;">
+    # Use Streamlit columns for layout
+    col1, col2 = st.columns([2, 1])
+    
+    with col1:
+        st.write(df)
+    
+    with col2:
+        st.markdown(
+            f"""
+            <div style="text-align: right; font-size: 20px; font-weight: bold;">
                 <p>Oldest Date: {oldest_date}</p>
                 <p>Newest Date: {newest_date}</p>
                 <p>Total Value for 'Tarifas - Pagamento': {total_value_formatted}</p>
             </div>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+            """,
+            unsafe_allow_html=True
+        )
 else:
     st.write("Please upload an Excel or CSV file to proceed.")
