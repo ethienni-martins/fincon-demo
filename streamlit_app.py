@@ -20,7 +20,7 @@ if uploaded_file is not None:
     # Check if the 'Data' column exists
     if 'Data' in df.columns:
         # Convert the 'Data' column to datetime format
-        df['Data'] = pd.to_datetime(df['Data'], format='%Y-%m-%d', errors='coerce')
+        df['Data'] = pd.to_datetime(df['Data'], errors='coerce')
         
         # Find the oldest and newest dates
         oldest_date = df['Data'].min()
@@ -37,9 +37,9 @@ if uploaded_file is not None:
     if 'Histórico' in df.columns and 'Valor' in df.columns:
         # Convert 'Valor' column to numeric, forcing errors to NaN and then fill NaN with 0
         df['Valor'] = pd.to_numeric(df['Valor'], errors='coerce').fillna(0)
-        mask = df['Histórico'] == 'Tarifas - Pagamento recebido:'
+        mask = df['Histórico'].str.contains('Tarifas - Pagamento', na=False)
         total_value = df.loc[mask, 'Valor'].sum()
-        st.write("Total Value for 'Tarifas - Pagamento recebido:':", total_value)
+        st.write("Total Value for 'Tarifas - Pagamento':", total_value)
     else:
         st.write("The uploaded file does not contain the required 'Histórico' or 'Valor' columns.")
 else:
