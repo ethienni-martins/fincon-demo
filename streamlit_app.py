@@ -38,11 +38,11 @@ if uploaded_file is not None:
     # Display the dataframe and results side by side
     st.markdown(
         f"""
-        <div style="display: flex; justify-content: space-between;">
-            <div style="flex: 1; width: 50%; font-size: 12px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div style="flex: 1; width: 48%; font-size: 12px; margin-right: 2%;">
                 {df.to_html(index=False)}
             </div>
-            <div style="flex: 0 0 300px; text-align: right; padding-left: 20px; font-size: 20px; font-weight: bold;">
+            <div style="flex: 0 0 48%; text-align: right; font-size: 20px; font-weight: bold;">
                 <p>Oldest Date: {oldest_date}</p>
                 <p>Newest Date: {newest_date}</p>
                 <p>Total Value for 'Tarifas - Pagamento': {total_value_formatted}</p>
