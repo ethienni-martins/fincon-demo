@@ -35,7 +35,7 @@ if uploaded_file is not None:
         total_value_formatted = f"R$ {total_value:.2f}"
         
         # Sum values for 'Pix'
-        pix_mask = df['Histórico'].str.contains('Pix', na=False, case=False)
+        pix_mask = df['Histórico'].str.contains('pix', na=False, case=False)
         pix_values = df.loc[pix_mask, 'Valor']
         pix_recebido = pix_values[pix_values > 0].sum()
         pagamento_via_pix = pix_values[pix_values < 0].sum()
