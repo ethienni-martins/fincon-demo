@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
 
 # Title of the app
 st.title('Oldest and Newest Dates Finder')
@@ -52,5 +53,14 @@ if uploaded_file is not None:
             """,
             unsafe_allow_html=True
         )
+    
+    # Display bar chart below the dataframe
+    st.write("## Total Value for 'Tarifas - Pagamento'")
+    fig, ax = plt.subplots()
+    ax.bar(['Total Value'], [total_value])
+    ax.set_ylabel('Value (R$)')
+    ax.set_title("Total Value for 'Tarifas - Pagamento'")
+    st.pyplot(fig)
+
 else:
     st.write("Please upload an Excel or CSV file to proceed.")
