@@ -1,5 +1,9 @@
 import streamlit as st
 import pandas as pd
+import locale
+
+# Set locale to Brazilian Portuguese
+locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 # Title of the app
 st.title('Oldest and Newest Dates Finder')
@@ -32,7 +36,7 @@ if uploaded_file is not None:
         # Sum values for 'Tarifas - Pagamento'
         tarifas_mask = df['Histórico'].str.contains('Tarifas - Pagamento', na=False)
         total_value = df.loc[tarifas_mask, 'Valor'].sum()
-        total_value_formatted = f"R$ {total_value:.2f}"
+        total_value_formatted = locale.currency(total_value, grouping=True)
         
         # Sum values for 'Pix'
         pix_mask = df['Histórico'].str.contains('Pix', na=False, case=False)
@@ -40,8 +44,8 @@ if uploaded_file is not None:
         pix_recebido = pix_values[pix_values > 0].sum()
         pagamento_via_pix = pix_values[pix_values < 0].sum()
         
-        pix_recebido_formatted = f"R$ {pix_recebido:.2f}"
-        pagamento_via_pix_formatted = f"R$ {pagamento_via_pix:.2f}"
+        pix_recebido_formatted = locale.currency(pix_recebido, grouping=True)
+        pagamento_via_pix_formatted = locale.currency(pagamento_via_pix, grouping=True)
     else:
         st.write("The uploaded file does not contain the required 'Histórico' or 'Valor' columns.")
         total_value_formatted = pix_recebido_formatted = pagamento_via_pix_formatted = None
