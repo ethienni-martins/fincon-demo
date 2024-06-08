@@ -38,11 +38,9 @@ if uploaded_file is not None:
     # Display the dataframe and results side by side
     st.markdown(
         f"""
-        <div style="display: flex;">
-            <div style="flex: 1; width: 50%;">
-                <div style="font-size: 12px;">
-                    {df.to_html(index=False)}
-                </div>
+        <div style="display: flex; justify-content: space-between;">
+            <div style="flex: 1; width: 50%; font-size: 12px;">
+                {df.to_html(index=False)}
             </div>
             <div style="flex: 0 0 300px; text-align: right; padding-left: 20px; font-size: 20px; font-weight: bold;">
                 <p>Oldest Date: {oldest_date}</p>
@@ -55,4 +53,3 @@ if uploaded_file is not None:
     )
 else:
     st.write("Please upload an Excel or CSV file to proceed.")
-
