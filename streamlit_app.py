@@ -29,10 +29,18 @@ if uploaded_file is not None:
         st.write("The uploaded file does not contain a 'Data' column.")
         oldest_date = newest_date = total_value_formatted = None
     
+    # Format currency columns
+    currency_columns = ['Saldo Inicial', 'Valor', 'Saldo Final']
+    for col in currency_columns:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0)
+            df[col] = df[col].apply(format_currency)
+    
     # Search for the specific string in the "Histórico" column and sum the values in the "Valor" column
     if 'Histórico' in df.columns and 'Valor' in df.columns:
-        df['Valor'] = pd.to_numeric(df['Valor'], errors='coerce').fillna(0)
-        
+        # Convert 'Valor' column back to numeric for calculations
+        df['Valor'] = df['Valor'].replace('[R$ ]', '', regex=True).replace(',', '.', regex=True).astype(float)
+
         # Sum values for 'Tarifas - Pagamento'
         tarifas_mask = df['Histórico'].str.contains('Tarifas - Pagamento', na=False)
         total_value = df.loc[tarifas_mask, 'Valor'].sum()
