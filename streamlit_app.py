@@ -8,6 +8,7 @@ def format_currency(value):
 # Title of the app
 st.title('Oldest and Newest Dates Finder')
 
+
 # Upload the file
 uploaded_file = st.file_uploader("Upload your Excel or CSV file", type=["xlsx", "csv"])
 
