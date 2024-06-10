@@ -8,7 +8,6 @@ def format_currency(value):
 # Title of the app
 st.title('Oldest and Newest Dates Finder')
 
-
 # Upload the file
 uploaded_file = st.file_uploader("Upload your Excel or CSV file", type=["xlsx", "csv"])
 
@@ -40,7 +39,7 @@ if uploaded_file is not None:
     # Search for the specific string in the "Histórico" column and sum the values in the "Valor" column
     if 'Histórico' in df.columns and 'Valor' in df.columns:
         # Convert 'Valor' column back to numeric for calculations
-        df['Valor'] = df['Valor'].replace('[R$ ]', '', regex=True).replace(',', '.', regex=True).astype(float)
+        df['Valor'] = df['Valor'].replace({'R\$ ': '', '\.': '', ',': '.'}, regex=True).astype(float)
 
         # Sum values for 'Tarifas - Pagamento'
         tarifas_mask = df['Histórico'].str.contains('Tarifas - Pagamento', na=False)
