@@ -4,7 +4,7 @@ import altair as alt
 
 # Function to format currency in Brazilian notation
 def format_currency(value):
-    return f"R$ {value:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+    return f"R$ {value:,.2f}".replace(",", "X").replace(".", ",").replace("X", ",")
 
 # Title of the app
 st.title('Oldest and Newest Dates Finder')
@@ -92,21 +92,7 @@ if uploaded_file is not None:
 
         # Prepare data for the histogram
         tarifas_data = df.loc[tarifas_mask, ['Data', 'Valor']]
+        tarifas_data['Data'] = tarifas_data['Data'].dt.strftime('%d-%m-%Y')
+        tarifas_data_grouped = tarifas_data.groupby('Data').sum().reset_index()
 
-        # Create the Altair chart
-        chart = alt.Chart(tarifas_data).mark_bar().encode(
-            x='Data:T',
-            y='Valor:Q'
-        ).properties(
-            width=600,
-            height=400
-        ).configure_axis(
-            labelFontSize=12,
-            titleFontSize=14
-        ).configure_title(
-            fontSize=16
-        )
-
-        st.altair_chart(chart, use_container_width=True)
-else:
-    st.write("Please upload an Excel or CSV file to proceed.")
+    
