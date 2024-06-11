@@ -95,4 +95,20 @@ if uploaded_file is not None:
         tarifas_data['Data'] = tarifas_data['Data'].dt.strftime('%d-%m-%Y')
         tarifas_data_grouped = tarifas_data.groupby('Data').sum().reset_index()
 
-    
+        # Create the Altair chart
+        chart = alt.Chart(tarifas_data_grouped).mark_bar().encode(
+            x=alt.X('Data:T', axis=alt.Axis(title='Date', format='%d-%m-%Y')),
+            y=alt.Y('Valor:Q', axis=alt.Axis(title='Amount'))
+        ).properties(
+            width=600,
+            height=400
+        ).configure_axis(
+            labelFontSize=12,
+            titleFontSize=14
+        ).configure_title(
+            fontSize=16
+        )
+
+        st.altair_chart(chart, use_container_width=True)
+else:
+    st.write("Please upload an Excel or CSV file to proceed.")
