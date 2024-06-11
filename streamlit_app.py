@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import altair as alt
 
 # Function to format currency in Brazilian notation
 def format_currency(value):
@@ -88,7 +89,24 @@ if uploaded_file is not None:
     if st.session_state.show_chart:
         st.write("## Total Value for 'Tarifas - Pagamento'")
         st.write("### Histogram of 'Tarifas - Pagamento'")
-        tarifas_values = df.loc[tarifas_mask, 'Valor']
-        st.bar_chart(tarifas_values)
+
+        # Prepare data for the histogram
+        tarifas_data = df.loc[tarifas_mask, ['Data', 'Valor']]
+
+        # Create the Altair chart
+        chart = alt.Chart(tarifas_data).mark_bar().encode(
+            x='Data:T',
+            y='Valor:Q'
+        ).properties(
+            width=600,
+            height=400
+        ).configure_axis(
+            labelFontSize=12,
+            titleFontSize=14
+        ).configure_title(
+            fontSize=16
+        )
+
+        st.altair_chart(chart, use_container_width=True)
 else:
     st.write("Please upload an Excel or CSV file to proceed.")
