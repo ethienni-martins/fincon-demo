@@ -96,12 +96,12 @@ if uploaded_file is not None:
 
         # Prepare data for the histogram
         tarifas_data = df.loc[tarifas_mask, ['Data', 'Valor']]
-        tarifas_data['Data'] = tarifas_data['Data'].dt.strftime('%Y-%m-%d')
+        tarifas_data['Data'] = tarifas_data['Data'].dt.strftime('%d-%m-%Y')
         tarifas_data_grouped = tarifas_data.groupby('Data').sum().reset_index()
 
         # Create the Altair chart
         chart = alt.Chart(tarifas_data_grouped).mark_bar().encode(
-            x=alt.X('Data:T', axis=alt.Axis(title='Date')),
+            x=alt.X('Data:T', axis=alt.Axis(title='Date', format='%d-%m-%Y', labelAngle=-45)),
             y=alt.Y('Valor:Q', axis=alt.Axis(title='Amount'))
         ).properties(
             width=600,
