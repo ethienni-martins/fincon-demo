@@ -4,7 +4,11 @@ import altair as alt
 
 # Function to format currency in Brazilian notation
 def format_currency(value):
-    return f"R$ {value:,.2f}".replace(",", "X").replace(".", ",").replace("X", ",")
+    return f"R$ {value:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+
+# Function to convert Brazilian formatted string to float
+def convert_to_float(value):
+    return float(value.replace('R$ ', '').replace('.', '').replace(',', '.'))
 
 # Title of the app
 st.title('Oldest and Newest Dates Finder')
@@ -34,13 +38,13 @@ if uploaded_file is not None:
     currency_columns = ['Saldo Inicial', 'Valor', 'Saldo Final']
     for col in currency_columns:
         if col in df.columns:
-            df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0)
+            df[col] = pd.to_numeric(df[col].replace({'R\$ ': '', '\.': '', ',': '.'}, regex=True).astype(float), errors='coerce').fillna(0)
             df[col] = df[col].apply(format_currency)
     
     # Search for the specific string in the "Histórico" column and sum the values in the "Valor" column
     if 'Histórico' in df.columns and 'Valor' in df.columns:
         # Convert 'Valor' column back to numeric for calculations
-        df['Valor'] = df['Valor'].replace({'R\$ ': '', '\.': '', ',': '.'}, regex=True).astype(float)
+        df['Valor'] = df['Valor'].apply(convert_to_float)
 
         # Sum values for 'Tarifas - Pagamento'
         tarifas_mask = df['Histórico'].str.contains('Tarifas - Pagamento', na=False)
