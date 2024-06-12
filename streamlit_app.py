@@ -13,7 +13,7 @@ def convert_to_float(value):
     return float(value.replace('R$ ', '').replace('.', '').replace(',', '.'))
 
 # Display the logo at the top of the page
-st.image("/mnt/data/image.png", use_column_width=True)
+st.image("Rationiric_Logo_(Name)_white background.jpg", use_column_width=True)
 
 # Title of the app
 st.title('Extrato Completo')
