@@ -13,7 +13,7 @@ def convert_to_float(value):
     return float(value.replace('R$ ', '').replace('.', '').replace(',', '.'))
 
 # Display the logo at the top of the page
-st.image('logos/rationiric.png', width=250)
+st.image('Rationiric_Logo_(Name)_white background.jpg', width=250)
 st.markdown("---")
 
 
