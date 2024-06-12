@@ -94,8 +94,8 @@ if uploaded_file is not None:
         st.session_state.show_chart = not st.session_state.show_chart
     
     if st.session_state.show_chart:
-        st.write("## Total Value for 'Tarifas - Pagamento'")
-        st.write("### Histogram of 'Tarifas - Pagamento'")
+        st.write("## Valor Total de 'Tarifas - Pagamento'")
+        st.write("### Gráfico de 'Tarifas - Pagamento'")
 
         # Prepare data for the histogram
         tarifas_data = df.loc[tarifas_mask, ['Data', 'Valor']]
