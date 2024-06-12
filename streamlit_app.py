@@ -13,10 +13,10 @@ def convert_to_float(value):
     return float(value.replace('R$ ', '').replace('.', '').replace(',', '.'))
 
 # Title of the app
-st.title('Oldest and Newest Dates Finder')
+st.title('Extrato Completo')
 
 # Upload the file
-uploaded_file = st.file_uploader("Upload your Excel or CSV file", type=["xlsx", "csv"])
+uploaded_file = st.file_uploader("Faca o upload do arquivo Excel ou CSV ", type=["xlsx", "csv"])
 
 if uploaded_file is not None:
     # Determine the file type and read the file accordingly
@@ -63,7 +63,7 @@ if uploaded_file is not None:
         pix_recebido_formatted = format_currency(pix_recebido)
         pagamento_via_pix_formatted = format_currency(pagamento_via_pix)
     else:
-        st.write("The uploaded file does not contain the required 'Histórico' or 'Valor' columns.")
+        st.write("O arquivo carregado não tem a coluna 'Histórico' ou 'Valor' ")
         total_value_formatted = pix_recebido_formatted = pagamento_via_pix_formatted = None
     
     # Use Streamlit columns for layout
@@ -76,9 +76,9 @@ if uploaded_file is not None:
         st.markdown(
             f"""
             <div style="text-align: right; font-size: 20px; font-weight: bold;">
-                <p>Oldest Date: {oldest_date}</p>
-                <p>Newest Date: {newest_date}</p>
-                <p>Total Value for 'Tarifas - Pagamento': {total_value_formatted}</p>
+                <p>Data Inicial: {oldest_date}</p>
+                <p>Data Final: {newest_date}</p>
+                <p>Valor Total de 'Tarifas - Pagamento': {total_value_formatted}</p>
                 <p>Pix Recebido: {pix_recebido_formatted}</p>
                 <p>Pagamento via Pix: {pagamento_via_pix_formatted}</p>
             </div>
