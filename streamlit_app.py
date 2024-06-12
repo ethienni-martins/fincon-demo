@@ -13,7 +13,7 @@ def convert_to_float(value):
     return float(value.replace('R$ ', '').replace('.', '').replace(',', '.'))
 
 # Title of the app
-st.title('Extrato Completo - Conciliação')
+st.title('Oldest and Newest Dates Finder')
 
 # Upload the file
 uploaded_file = st.file_uploader("Upload your Excel or CSV file", type=["xlsx", "csv"])
@@ -94,8 +94,8 @@ if uploaded_file is not None:
         st.session_state.show_chart = not st.session_state.show_chart
     
     if st.session_state.show_chart:
-        st.write("## Valor Total de 'Tarifas - Pagamento'")
-        st.write("### Histograma de 'Tarifas - Pagamento'")
+        st.write("## Total Value for 'Tarifas - Pagamento'")
+        st.write("### Histogram of 'Tarifas - Pagamento'")
 
         # Prepare data for the histogram
         tarifas_data = df.loc[tarifas_mask, ['Data', 'Valor']]
@@ -116,7 +116,7 @@ if uploaded_file is not None:
         ).configure_title(
             fontSize=16
         )
-        alt.invert.yaxis()
+
         st.altair_chart(chart, use_container_width=True)
 else:
     st.write("Please upload an Excel or CSV file to proceed.")
