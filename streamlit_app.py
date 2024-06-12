@@ -102,14 +102,10 @@ if uploaded_file is not None:
         tarifas_data['Data'] = tarifas_data['Data'].dt.strftime('%d-%m-%Y')
         tarifas_data_grouped = tarifas_data.groupby('Data').sum().reset_index()
 
-        # Display grouped data for debugging
-        st.write("### Debugging: Display Grouped Data")
-        st.write(tarifas_data_grouped)
-
         # Create the Altair chart
         chart = alt.Chart(tarifas_data_grouped).mark_bar(color='red').encode(
             x=alt.X('Data:O', axis=alt.Axis(title='Date', labelAngle=-45)),
-            y=alt.Y('Valor:Q', axis=alt.Axis(title='Amount'), sort=alt.SortOrder('ascending'), scale=alt.Scale(domain=[-max(tarifas_data_grouped['Valor']), max(tarifas_data_grouped['Valor'])])),
+            y=alt.Y('Valor:Q', axis=alt.Axis(title='Amount', labelExpr="datum.value < 0 ? '(' + format(-datum.value, ',.2f') + ')' : format(datum.value, ',.2f')")),
             tooltip=[alt.Tooltip('Data:O', title='Date'), alt.Tooltip('Valor:Q', title='Amount')]
         ).properties(
             width=600,
