@@ -120,7 +120,7 @@ if uploaded_file is not None:
         ).configure_title(
             fontSize=16
         ).configure_view(
-            continuousHeight=300  # Ensure bars grow upwards
+            strokeOpacity=0  # Ensure bars grow upwards
         )
 
         st.altair_chart(chart, use_container_width=True)
