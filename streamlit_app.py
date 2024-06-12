@@ -36,18 +36,19 @@ if uploaded_file is not None:
         st.write("The uploaded file does not contain a 'Data' column.")
         oldest_date = newest_date = total_value_formatted = None
     
-    # Format currency columns for display
+    # Ensure all currency columns are numeric for calculations
     currency_columns = ['Saldo Inicial', 'Valor', 'Saldo Final']
     for col in currency_columns:
         if col in df.columns:
-            df[col] = pd.to_numeric(df[col].replace({'R\$ ': '', '\.': '', ',': '.'}, regex=True).astype(float), errors='coerce').fillna(0)
+            df[col] = pd.to_numeric(df[col].replace({'R\$ ': '', '\.': '', ',': '.'}, regex=True), errors='coerce').fillna(0)
+    
+    # Apply currency formatting for display
+    for col in currency_columns:
+        if col in df.columns:
             df[f'{col}_formatted'] = df[col].apply(format_currency)
     
     # Search for the specific string in the "Histórico" column and sum the values in the "Valor" column
     if 'Histórico' in df.columns and 'Valor' in df.columns:
-        # Convert 'Valor' column back to numeric for calculations
-        df['Valor'] = df['Valor'].apply(convert_to_float)
-
         # Sum values for 'Tarifas - Pagamento'
         tarifas_mask = df['Histórico'].str.contains('Tarifas - Pagamento', na=False)
         total_value = df.loc[tarifas_mask, 'Valor'].sum()
@@ -107,7 +108,7 @@ if uploaded_file is not None:
 
         # Create the Altair chart
         chart = alt.Chart(tarifas_data_grouped).mark_bar(color='red').encode(
-            x=alt.X('Data:T', axis=alt.Axis(title='Date', format='%d-%m-%Y', labelAngle=-45)),
+            x=alt.X('Data:O', axis=alt.Axis(title='Date', labelAngle=-45)),
             y=alt.Y('Valor:Q', axis=alt.Axis(title='Amount'))
         ).properties(
             width=600,
