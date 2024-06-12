@@ -2,8 +2,10 @@ import streamlit as st
 import pandas as pd
 import altair as alt
 
-# Function to format currency in Brazilian notation
+# Function to format currency in Brazilian notation with parentheses for negative values
 def format_currency(value):
+    if value < 0:
+        return f"(R$ {abs(value):,.2f})".replace(",", "X").replace(".", ",").replace("X", ".")
     return f"R$ {value:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
 # Function to convert Brazilian formatted string to float
@@ -103,7 +105,7 @@ if uploaded_file is not None:
         st.write(tarifas_data_grouped)  # Debugging step to display the grouped data
 
         # Create the Altair chart
-        chart = alt.Chart(tarifas_data_grouped).mark_bar().encode(
+        chart = alt.Chart(tarifas_data_grouped).mark_bar(color='red').encode(
             x=alt.X('Data:O', axis=alt.Axis(title='Date', labelAngle=-45)),
             y=alt.Y('Valor:Q', axis=alt.Axis(title='Amount'))
         ).properties(
