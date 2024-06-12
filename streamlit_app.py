@@ -116,7 +116,7 @@ if uploaded_file is not None:
         ).configure_title(
             fontSize=16
         )
-        alt.chart.invert.yaxis()
+        alt.invert.yaxis()
         st.altair_chart(chart, use_container_width=True)
 else:
     st.write("Please upload an Excel or CSV file to proceed.")
