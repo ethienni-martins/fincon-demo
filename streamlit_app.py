@@ -13,9 +13,7 @@ def convert_to_float(value):
     return float(value.replace('R$ ', '').replace('.', '').replace(',', '.'))
 
 # Display the logo at the top of the page
-st.image('Rationiric_Logo_(Name)_white background.jpg', width=250)
-st.markdown("---")
-
+st.image("/mnt/data/image.png", use_column_width=True)
 
 # Title of the app
 st.title('Extrato Completo')
@@ -147,4 +145,18 @@ if uploaded_file is not None:
         # Create the Altair chart
         chart = alt.Chart(pix_data_grouped).mark_bar(color='blue').encode(
             x=alt.X('Data:O', axis=alt.Axis(title='Date', labelAngle=-45)),
-            y=alt.Y('Valor:Q', axis=alt.Axis(title='Amount', labelExpr="datum.value < 0 ? '(' + format(-datum.value, ',.2f') + ')' : format(datum.value
+            y=alt.Y('Valor:Q', axis=alt.Axis(title='Amount', labelExpr="datum.value < 0 ? '(' + format(-datum.value, ',.2f') + ')' : format(datum.value, ',.2f')")),
+            tooltip=[alt.Tooltip('Data:O', title='Date'), alt.Tooltip('Valor:Q', title='Amount')]
+        ).properties(
+            width=600,
+            height=400
+        ).configure_axis(
+            labelFontSize=12,
+            titleFontSize=14
+        ).configure_title(
+            fontSize=16
+        )
+
+        st.altair_chart(chart, use_container_width=True)
+else:
+    st.write("Please upload an Excel or CSV file to proceed.")
