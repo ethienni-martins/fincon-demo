@@ -109,7 +109,7 @@ if uploaded_file is not None:
         # Create the Altair chart
         chart = alt.Chart(tarifas_data_grouped).mark_bar(color='red').encode(
             x=alt.X('Data:O', axis=alt.Axis(title='Date', labelAngle=-45)),
-            y=alt.Y('Valor:Q', axis=alt.Axis(title='Amount', labelExpr="datum.value < 0 ? '(' + format(-datum.value, ',.2f') + ')' : format(datum.value, ',.2f')")),
+            y=alt.Y('Valor:Q', axis=alt.Axis(title='Amount'), sort=alt.SortOrder('ascending'), scale=alt.Scale(domain=[-max(tarifas_data_grouped['Valor']), max(tarifas_data_grouped['Valor'])])),
             tooltip=[alt.Tooltip('Data:O', title='Date'), alt.Tooltip('Valor:Q', title='Amount')]
         ).properties(
             width=600,
@@ -119,8 +119,6 @@ if uploaded_file is not None:
             titleFontSize=14
         ).configure_title(
             fontSize=16
-        ).configure_view(
-            strokeOpacity=0  # Ensure bars grow upwards
         )
 
         st.altair_chart(chart, use_container_width=True)
