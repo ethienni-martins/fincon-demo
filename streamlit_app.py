@@ -80,7 +80,7 @@ if uploaded_file is not None:
                 <p>Data Final: {newest_date}</p>
                 <p>Valor Total de 'Tarifas - Pagamento': {total_value_formatted}</p>
                 <p>Pix Recebido: {pix_recebido_formatted}</p>
-                <p>Pagamento via Pix: {pagamento_via_pix_formatted}</p>
+                <p>Pagamento - Pix: {pagamento_via_pix_formatted}</p>
             </div>
             """,
             unsafe_allow_html=True
