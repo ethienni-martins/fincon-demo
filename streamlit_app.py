@@ -12,12 +12,6 @@ def format_currency(value):
 def convert_to_float(value):
     return float(value.replace('R$ ', '').replace('.', '').replace(',', '.'))
 
-# Function to format y-axis values in Altair
-def format_y_axis(value):
-    if value < 0:
-        return f"(R$ {abs(value):,.2f})".replace(",", "X").replace(".", ",").replace("X", ".")
-    return f"R$ {value:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
-
 # Title of the app
 st.title('Oldest and Newest Dates Finder')
 
@@ -115,7 +109,8 @@ if uploaded_file is not None:
         # Create the Altair chart
         chart = alt.Chart(tarifas_data_grouped).mark_bar(color='red').encode(
             x=alt.X('Data:O', axis=alt.Axis(title='Date', labelAngle=-45)),
-            y=alt.Y('Valor:Q', axis=alt.Axis(title='Amount', labelExpr="datum.value < 0 ? '(' + format(-datum.value, ',.2f') + ')' : format(datum.value, ',.2f')"))
+            y=alt.Y('Valor:Q', axis=alt.Axis(title='Amount', labelExpr="datum.value < 0 ? '(' + format(-datum.value, ',.2f') + ')' : format(datum.value, ',.2f')")),
+            tooltip=[alt.Tooltip('Data:O', title='Date'), alt.Tooltip('Valor:Q', title='Amount')]
         ).properties(
             width=600,
             height=400
