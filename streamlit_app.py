@@ -36,12 +36,12 @@ if uploaded_file is not None:
         st.write("The uploaded file does not contain a 'Data' column.")
         oldest_date = newest_date = total_value_formatted = None
     
-    # Format currency columns
+    # Format currency columns for display
     currency_columns = ['Saldo Inicial', 'Valor', 'Saldo Final']
     for col in currency_columns:
         if col in df.columns:
             df[col] = pd.to_numeric(df[col].replace({'R\$ ': '', '\.': '', ',': '.'}, regex=True).astype(float), errors='coerce').fillna(0)
-            df[col] = df[col].apply(format_currency)
+            df[f'{col}_formatted'] = df[col].apply(format_currency)
     
     # Search for the specific string in the "Histórico" column and sum the values in the "Valor" column
     if 'Histórico' in df.columns and 'Valor' in df.columns:
@@ -101,12 +101,13 @@ if uploaded_file is not None:
         tarifas_data['Data'] = tarifas_data['Data'].dt.strftime('%d-%m-%Y')
         tarifas_data_grouped = tarifas_data.groupby('Data').sum().reset_index()
 
+        # Display grouped data for debugging
         st.write("### Debugging: Display Grouped Data")
-        st.write(tarifas_data_grouped)  # Debugging step to display the grouped data
+        st.write(tarifas_data_grouped)
 
         # Create the Altair chart
         chart = alt.Chart(tarifas_data_grouped).mark_bar(color='red').encode(
-            x=alt.X('Data:O', axis=alt.Axis(title='Date', labelAngle=-45)),
+            x=alt.X('Data:T', axis=alt.Axis(title='Date', format='%d-%m-%Y', labelAngle=-45)),
             y=alt.Y('Valor:Q', axis=alt.Axis(title='Amount'))
         ).properties(
             width=600,
