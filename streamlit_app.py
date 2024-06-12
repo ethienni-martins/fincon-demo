@@ -85,15 +85,26 @@ if uploaded_file is not None:
             """,
             unsafe_allow_html=True
         )
+
+    # Toggle button state using session state for both charts
+    if 'show_tarifas_chart' not in st.session_state:
+        st.session_state.show_tarifas_chart = False
+    if 'show_pix_chart' not in st.session_state:
+        st.session_state.show_pix_chart = False
     
-    # Toggle button state using session state
-    if 'show_chart' not in st.session_state:
-        st.session_state.show_chart = False
+    # Buttons to show charts
+    col3, col4 = st.columns([1, 1])
+    with col3:
+        if st.button("Total de Tarifas"):
+            st.session_state.show_tarifas_chart = not st.session_state.show_tarifas_chart
+            st.session_state.show_pix_chart = False
+    with col4:
+        if st.button("Total de Pagamento - Pix"):
+            st.session_state.show_pix_chart = not st.session_state.show_pix_chart
+            st.session_state.show_tarifas_chart = False
     
-    if st.button("Total de Tarifas"):
-        st.session_state.show_chart = not st.session_state.show_chart
-    
-    if st.session_state.show_chart:
+    # Display chart based on button clicks
+    if st.session_state.show_tarifas_chart:
         st.write("## Valor Total de 'Tarifas - Pagamento'")
         st.write("### Gráfico de 'Tarifas - Pagamento'")
 
@@ -104,6 +115,32 @@ if uploaded_file is not None:
 
         # Create the Altair chart
         chart = alt.Chart(tarifas_data_grouped).mark_bar(color='red').encode(
+            x=alt.X('Data:O', axis=alt.Axis(title='Date', labelAngle=-45)),
+            y=alt.Y('Valor:Q', axis=alt.Axis(title='Amount', labelExpr="datum.value < 0 ? '(' + format(-datum.value, ',.2f') + ')' : format(datum.value, ',.2f')")),
+            tooltip=[alt.Tooltip('Data:O', title='Date'), alt.Tooltip('Valor:Q', title='Amount')]
+        ).properties(
+            width=600,
+            height=400
+        ).configure_axis(
+            labelFontSize=12,
+            titleFontSize=14
+        ).configure_title(
+            fontSize=16
+        )
+
+        st.altair_chart(chart, use_container_width=True)
+
+    if st.session_state.show_pix_chart:
+        st.write("## Valor Total de 'Pagamento - Pix'")
+        st.write("### Gráfico de 'Pagamento - Pix'")
+
+        # Prepare data for the histogram
+        pix_data = df.loc[pix_mask, ['Data', 'Valor']]
+        pix_data['Data'] = pix_data['Data'].dt.strftime('%d-%m-%Y')
+        pix_data_grouped = pix_data.groupby('Data').sum().reset_index()
+
+        # Create the Altair chart
+        chart = alt.Chart(pix_data_grouped).mark_bar(color='blue').encode(
             x=alt.X('Data:O', axis=alt.Axis(title='Date', labelAngle=-45)),
             y=alt.Y('Valor:Q', axis=alt.Axis(title='Amount', labelExpr="datum.value < 0 ? '(' + format(-datum.value, ',.2f') + ')' : format(datum.value, ',.2f')")),
             tooltip=[alt.Tooltip('Data:O', title='Date'), alt.Tooltip('Valor:Q', title='Amount')]
